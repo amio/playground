@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Parallax Demo</title>
+<meta name="viewport" content="target-densitydpi=medium-dpi, width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta content="telephone=no" name="format-detection" />
+<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans' />
+<style>
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, p, th, td, em, form, input, select, textarea, button, header, section, aside, footer { margin:0; padding:0; }
+body { min-width:320px; background:#fff; font-size:14px; font-family: 'Open Sans', sans-serif; -webkit-text-size-adjust:none; overflow-x:hidden; }
+ul, li { list-style:none; }
+a { color:#000; text-decoration:none; }
+header { position:fixed; left:0; top:0; width:100%; height:42px; line-height:42px; background:#4c555f; border-top:1px solid #848d99; border-bottom:1px solid #000; box-shadow:0 1px 3px rgba(0, 0, 0, 0.2); color:#fff; text-align:center; z-index:9; }
+.wrap { margin-top:44px; }
+.hotel-album { height:210px; overflow:hidden; position:relative }
+.hotel-album img { display:block; width:100%; position:absolute; margin:0 auto; }
+.hotel-price { position:relative; margin-top:-44px; height:44px; line-height:44px; padding:0 10px; background:rgba(0, 0, 0, 0.6); font-size:16px; color:#fff; text-align:right; }
+.hotel-recommend, .hotel-addr, .hotel-service, .hotel-intro { padding:10px; background:#e3e3e6; font-size:12px; color:#333; }
+.hotel-recommend { position:relative; border-bottom:1px solid #c1c1c4; }
+.hotel-recommend:after { position:absolute; content:""; top:22px; right:12px; width:6px; height:6px; border-top:3px solid #53585e; border-right:3px solid #53585e; -webkit-transform:rotate(45deg); }
+.hotel-addr { border-top:1px solid #f7f7f8; }
+.hotel-service { border-bottom:1px solid #c1c1c4; }
+.hotel-intro { border-top:1px solid #f7f7f8; }
+.hotel-intro h4 { line-height:1.8; font-size:14px; }
+.hotel-intro .intro-para { padding-bottom:10px; }
+.hotel-map { width:100%; height:210px; position:relative; overflow:hidden }
+#hotel-map, #hotel-map-mask { width:100%; height:100%; position:absolute; top:0 }
+#hotel-map-mask { z-index:9; position:absolute; top:0; cursor:pointer; box-shadow:inset 0 0 12px rgba(0, 0, 0, 0.5) }
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+function initialize() {
+    /**
+     * Init hotel map.
+     */
+    var mapOptions = {
+        center: new google.maps.LatLng(31.230, 121.473),
+        zoom: 13,
+        zoomControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("hotel-map"), mapOptions);
+
+    /**
+     * Set album and map position on scroll.
+     */
+    var $album = $('.hotel-album img'),
+        $map = $('#hotel-map');
+    var mapPos = $map.offset(),
+        mapHeight = $map.height();
+
+    /**
+     * Set $album while scrolling
+     */
+    $(window).on('scroll touchmove', function () {
+        var scroll = document.body.scrollTop;
+        if (scroll >= 0) {
+            $album.css('top', scroll / 2);
+        }
+    });
+
+    /**
+     * Set $map while scrolling
+     */
+    google.maps.event.addListenerOnce(map, 'idle', function () {
+        // update map offset while onload
+        updateMapOffset();
+        // bind update on scroll
+        $(window).on('scroll touchmove', updateMapOffset);
+    });
+
+    /**
+     * Update map content offset base on current scroll position.
+     */
+    function updateMapOffset() {
+        var scroll = document.body.scrollTop,
+            top = mapPos.top,
+            wh = document.documentElement.clientHeight,
+            h = mapHeight,
+            y = 0;
+
+        if (scroll + wh > mapPos.top) {
+            // Compute offset:y
+            mapOffsetY = Math.round((top - scroll) * h / (wh - h) - h / 2);
+            // Set offset:y on map
+            offsetMap(map, mapOptions.center, 0, mapOffsetY);
+        }
+    }
+
+    /**
+     * Move map on pixel
+     *
+     * latlng is the apparent centre-point
+     * offsetx is the distance you want that point to move to the right, in pixels
+     * offsety is the distance you want that point to move upwards, in pixels
+     * offsetx and offsety are both optional
+     */
+    function offsetMap(map, latlng, offsetx, offsety) {
+
+        var scale = Math.pow(2, map.getZoom()),
+            projec = map.getProjection();
+
+        var worldCoordinateCenter = projec.fromLatLngToPoint(latlng);
+        var pixelOffset = new google.maps.Point((offsetx / scale) || 0, (offsety / scale) || 0);
+
+        var worldCoordinateNewCenter = new google.maps.Point(
+            worldCoordinateCenter.x - pixelOffset.x,
+            worldCoordinateCenter.y + pixelOffset.y
+        );
+
+        var newCenter = projec.fromPointToLatLng(worldCoordinateNewCenter);
+
+        map.setCenter(newCenter);
+    }
+}
+</script>
+</head>
+<body onload="initialize()">
+	<header>Shanghai Marriott Hotel</header>
+	<section class="wrap">
+		<!-- album -->
+		<div class="hotel-album">
+			<img src="http://images4.c-ctrip.com/target/hotel/89000/88580/7e355d5889d74aa8ba8a0f710ba7de0e_550_412.jpg" alt="" />
+		</div>
+
+		<div class="pannel">
+			<div class="hotel-price"><dfn>&pound;</dfn>178</div>
+			<div class="hotel-recommend">
+				<p>100% of guests recommend</p>
+				<div class="hotel-reviews">
+					<span class="star4-half"></span>
+					3 Reviews
+				</div>
+			</div>
+			<div class="hotel-addr">
+				This luxury hotel is located in Shanghai (Hongqiao), near the airport, Shanghai Zoo, Caohejing Hi-Tech Park, and Parkson Shopping Center. Local attractions also incl...
+			</div>
+		</div>
+
+		<!-- map -->
+		<div class="hotel-map">
+			<div id="hotel-map"></div>
+            <div id="hotel-map-mask"></div>
+		</div>
+
+		<div class="pannel">
+			<ul class="hotel-service">
+				<li>Free Internet</li>
+				<li>Free Parking</li>
+				<li>Pool</li>
+				<li>Room Service</li>
+				<li>Business Center</li>
+			</ul>
+			<div class="hotel-intro">
+				<div class="intro-para">
+					<h4>Property Amenities</h4>
+					<p>In addition to an indoor pool, Shanghai Marriott Hotel Hongqiao provides an indoor tennis court, a sauna, and a steam room. The hotel offers a coffee shop/cafe. A bar/lounge is on site where guests and unwind with a drink. An Internet point is located on site and high-speed wireless Internet access is complimentary. Business amenities at this 4.5-star property consist of a business center, secretarial services, and limo/town car service. Event facilities include a conference center, a meeting/...</p>
+				</div>
+				<div class="intro-para">
+					<h4>Address</h4>
+					<p>Shanghai Marriott Hotel Hongqiao<br />2270 Hong Qiao Road<br />Shanghai 200336<br />China</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
