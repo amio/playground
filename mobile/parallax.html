@@ -78,6 +78,19 @@ function initialize() {
      * Set $map while scrolling
      */
     google.maps.event.addListenerOnce(map, 'idle', function () {
+        new google.maps.Marker({
+            map: map,
+            position: mapOptions.center,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: 'hsl(210, 80%, 70%)',
+                fillOpacity: 0.8,
+                strokeColor: 'hsl(210, 60%, 40%)',
+                strokeOpacity: 0.9,
+                strokeWeight: 3,
+                scale: 7
+            }
+        });
         // update map offset while onload
         updateMapOffset();
         // bind update on scroll
@@ -129,6 +142,9 @@ function initialize() {
         map.setCenter(newCenter);
     }
 
+    /**
+     * Expand map when click on it
+     */
     $('#hotel-map-mask').on('click', function () {
         $('body').addClass('map-expanded');
         $mapWrapper.css({
@@ -137,6 +153,9 @@ function initialize() {
         });
     });
 
+    /**
+     * Collapse map when click close button
+     */
     $('#close-map').on('click', function () {
         $('body').removeClass('map-expanded');
         $mapWrapper.css({
