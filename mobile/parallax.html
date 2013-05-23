@@ -110,7 +110,7 @@ function initialize() {
 
         if (scroll + wh > mapPos.top) {
             // Compute offset:y
-            mapOffsetY = Math.round((top - scroll) * h / (wh - h) - h / 2);
+            mapOffsetY = Math.round((top - scroll + h / 2) * h / wh - h / 2);
             // Set offset:y on map
             offsetMap(map, mapOptions.center, 0, mapOffsetY);
         }
