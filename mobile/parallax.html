@@ -81,7 +81,7 @@ function initialize() {
         // update map offset while onload
         updateMapOffset();
         // bind update on scroll
-        $(window).on('scroll touchmove', updateMapOffset);
+        $(window).on('scroll touchmove resize', updateMapOffset);
     });
 
     /**
@@ -128,18 +128,12 @@ function initialize() {
         map.setCenter(newCenter);
     }
 
-    function disableScroll(e) {
-        e.stopPropagation();
-        return false;
-    }
-
     $('#hotel-map-mask').on('click', function () {
         $('body').addClass('map-expanded');
         $mapWrapper.css({
             'top': 44 + document.body.scrollTop - mapPos.top,
             'height': document.documentElement.clientHeight - 44
         });
-        $mapWrapper.on('scroll', disableScroll);
     });
 
     $('#close-map').on('click', function () {
