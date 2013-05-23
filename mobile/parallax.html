@@ -30,6 +30,13 @@ header { position:fixed; left:0; top:0; width:100%; height:42px; line-height:42p
 .hotel-map { width:100%; height:210px; position:relative; overflow:hidden }
 #hotel-map, #hotel-map-mask { width:100%; height:100%; position:absolute; top:0 }
 #hotel-map-mask { z-index:2; position:absolute; top:0; cursor:pointer; box-shadow:inset 0 0 12px rgba(0, 0, 0, 0.5) }
+.hotel-map { transition:all 0.5s ease }
+.map-expanded { position:relative; z-index:8 }
+.map-expanded #hotel-map { z-index:1 }
+.map-expanded #hotel-map-mask { pointer-events:none }
+.on-map-expanded, .map-expanded .default { display:none }
+.map-expanded .on-map-expanded { display:inline }
+.map-expanded #close-map { float:right; width:44px; height:44px; line-height:40px; text-align:center; font-size:22px; font-weight:bold; -webkit-transform:rotate(45deg); cursor:pointer }
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
@@ -52,6 +59,7 @@ function initialize() {
      * Set album and map position on scroll.
      */
     var $album = $('.hotel-album img'),
+        $mapWrapper = $('.hotel-map'),
         $map = $('#hotel-map');
     var mapPos = $map.offset(),
         mapHeight = $map.height();
@@ -119,11 +127,37 @@ function initialize() {
 
         map.setCenter(newCenter);
     }
+
+    function disableScroll(e) {
+        e.stopPropagation();
+        return false;
+    }
+
+    $('#hotel-map-mask').on('click', function () {
+        $('body').addClass('map-expanded');
+        $mapWrapper.css({
+            'top': 44 + document.body.scrollTop - mapPos.top,
+            'height': document.documentElement.clientHeight - 44
+        });
+        $mapWrapper.on('scroll', disableScroll);
+    });
+
+    $('#close-map').on('click', function () {
+        $('body').removeClass('map-expanded');
+        $mapWrapper.css({
+            'top': 0,
+            'height': mapHeight
+        });
+    });
 }
 </script>
 </head>
 <body onload="initialize()">
-	<header>Shanghai Marriott Hotel</header>
+	<header>
+        <span class="default">Shanghai Marriott Hotel</span>
+        <span class="on-map-expanded">Map</span>
+        <span id="close-map" class="on-map-expanded">+</span>
+    </header>
 	<section class="wrap">
 		<!-- album -->
 		<div class="hotel-album">
