@@ -81,7 +81,8 @@ function initialize() {
         // update map offset while onload
         updateMapOffset();
         // bind update on scroll
-        $(window).on('scroll touchmove resize', updateMapOffset);
+        $(window).on('resize', updateMapOffset);
+        $(document).on('scroll touchmove', updateMapOffset);
     });
 
     /**
