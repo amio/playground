@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mobile Demo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <style type="text/css">
+		.pure-g { font-size: 0 }
+		.pure-g div { font-size: 1em; }
+
+		html, body, #main { height: 100%; width: 100%; margin: 0; padding: 0 }
+		html, body { overflow: hidden; font: 24px 'Open Sans', sans-serif }
+		#main { overflow: scroll }
+		.nav { height: 44px; background-image: none,-webkit-gradient(linear,left top,left bottom,from(#7a7c7c),to(#5f6060)) }
+		.pure-g .view-title { font: bold 20px/44px sans-serif; text-align: center; font-weight: bold; color: #333; text-shadow: #999 1px 1px 0; }
+		.left-ctrls { text-align: left; }
+		.right-ctrls { text-align: right; }
+		
+		.btn { display: inline-block; vertical-align: top; height: 26px; margin: 8px; padding: 0 8px; white-space: nowrap; text-align: center; color: #eff1f1; text-shadow: 0 -1px 0 black; font: normal 14px/26px sans-serif; text-decoration: none; border-radius: 3px; border: 1px solid rgba(0,0,0,0.8); background-image: none,-webkit-gradient(linear,left top,left bottom,from(#7a7c7c),to(#5f6060)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); color: #eff1f1; cursor: pointer }
+		.btn:active { background-image: none,-webkit-gradient(linear,left top,left bottom,from(#333),to(#555)); box-shadow: none }
+
+	</style>
+	<script>
+
+	// alert(window.innerHeight);
+	// alert(window.innerWidth);
+	window.addEventListener("load",function() {
+	
+		// Hide address bar
+		setTimeout(function(){
+			// document.body.style.height = (window.innerHeight + 52) + 'px';
+			window.scrollTo(0, 1);
+		}, 0);
+	
+		// Prevent move to show address bar
+		document.addEventListener('touchmove', function (e) {
+			e.preventDefault();
+		}, false);
+		
+		var info = document.getElementById('info');
+		info.innerHTML = '<br/>'+ window.outerHeight + ' - ' + window.innerWidth;
+	});
+	</script>
+</head>
+<body>
+    <div id="main">
+	    <div class="nav pure-g">
+			<div class="left-ctrls pure-u-1-4">
+				<a class="btn">返回</a>
+			</div>
+			<div class="view-title pure-u-1-2">4-Mobile</div>
+			<div class="right-ctrls pure-u-1-4">
+				<a class="btn">详情</a>
+			</div>
+		</div>
+		Hello Amio!
+		<p id='info' style="height: 500px"></p>
+	</div>
+</body>
+</html>
