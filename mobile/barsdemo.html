@@ -3,13 +3,18 @@
 <head>
     <meta charset="utf-8"/>
     <title>Bars demo</title>
-    <meta name="viewport" content="initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style>
         html, body, section { height: 100%; width: 100%; margin: 0 }
-        section { display: table }
-        header, footer, article { display: table-row }
-        header, footer { height: 44px; background-color: lightskyblue; text-align: center; font: 16px/44px "Open Sans", sans-serif; color: #555 }
-        article { background-color: lightyellow; height: 100% }
+        section { position: relative; overflow-y: scroll }
+        header, footer { position: fixed }
+        header { top: 0; left: 0; right: 0 }
+        footer { bottom: 0; left: 0; right: 0 }
+        article { top: 44px; bottom: 44px; left: 0; right: 0 }
+        header, footer { z-index: 3; height: 44px; background-color: lightgray; text-align: center; font: 16px/44px "Open Sans", sans-serif; color: #555 }
+        article { height: 100%; background-color: lightyellow; overflow: auto; -webkit-overflow-scrolling: touch }
+        article { box-sizing: border-box; -webkit-box-sizing: border-box; border: solid transparent; border-width: 44px 0 }
+        article p { line-height: 2em }
     </style>
 </head>
 <body>
@@ -17,6 +22,8 @@
     <header>HEADER</header>
     <article>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi corporis eius exercitationem fuga inventore ipsam libero necessitatibus possimus rem sapiente? Adipisci aperiam exercitationem in optio placeat repellendus reprehenderit similique velit!</p>
+        <input type="text"/>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad animi cumque dicta dolorem excepturi exercitationem facilis fuga harum incidunt, magnam maxime nemo odit perspiciatis repudiandae similique sit totam voluptate!</p>
         <input type="text"/>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad animi cumque dicta dolorem excepturi exercitationem facilis fuga harum incidunt, magnam maxime nemo odit perspiciatis repudiandae similique sit totam voluptate!</p>
     </article>
